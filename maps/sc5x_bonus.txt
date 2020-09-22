@@ -14,7 +14,7 @@ SKR_CAUGHT = Hider "{0}" has been caught by seeker "{1}".^n
 [TR]
 SKR_STATUS = EBE OLARAK OYNAYAN YOK^nEbe olmak istiyorsaniz ''.seeker'' yazin.
 SKR_CURRENT = Mevcut Ebe: {0}
-SKR_ERR_ALIVE = Bu komutu ölü ike kullanamazsınız.^n
+SKR_ERR_ALIVE = Bu komutu ölü iken kullanamazsınız.^n
 SKR_ERR_ALHIDER = Zaten gizlenensiniz.^n
 SKR_HIDER = Artık gizlenensiniz.^n
 SKR_ERR_ALSEEKER = Zaten ebesiniz.^n
