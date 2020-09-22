@@ -200,7 +200,7 @@ HookReturnCode ClientSay(SayParameters@ pParams)
     if (args[0] == ".whoseeker") {
         CBasePlayer@ pSeeker = FindSeeker();
         if (pSeeker !is null) {
-			ClientPrintAllML("SKR_WHO_FIND ", { pSeeker.pev.netname});
+			ClientPrintAllML("SKR_WHO_FIND", { pSeeker.pev.netname});
             //snprintf(szResponse, "The current seeker is \"%1\".\n", pSeeker.pev.netname);
            // g_PlayerFuncs.ClientPrintAll(HUD_PRINTTALK, szResponse);
         } else {
