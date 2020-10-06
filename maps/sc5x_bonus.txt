@@ -1,5 +1,6 @@
 [EN]
 SKR_STATUS = NOBODY IS PLAYING AS THE SEEKER^nIf you want to be the seeker say ''.seeker'' in text chat.
+SKR_STATUS_TIMER = NOBODY IS PLAYING AS THE SEEKER^n Seeker selected randomly in {0} seconds.
 SKR_CURRENT = Current seeker: {0}
 SKR_ERR_ALIVE = You must be alive to use map commands.^n
 SKR_ERR_ALHIDER = You are already a hider.^n
@@ -10,9 +11,12 @@ SKR_SEEKER = You are now the seeker.
 SKR_WHO_FIND = The current seeker is "{0}".^n
 SKR_WHO_NOTEXISTS = There is currently no seeker. If you want to be the seeker say ''.seeker'' in text chat.^n
 SKR_CAUGHT = Hider "{0}" has been caught by seeker "{1}".^n
+SKR_ERR_SEEKER = You can't use this command, seeker will selecting randomly. 
+SKR_RANDOM_SEEKER = {0} select as seeker.
 
 [TR]
 SKR_STATUS = EBE OLARAK OYNAYAN YOK^nEbe olmak istiyorsaniz ''.seeker'' yazin.
+SKR_STATUS_TIMER = EBE OLARAK OYNAYAN YOK^nEbe {0} sn sonra rasgele secilecek.
 SKR_CURRENT = Mevcut Ebe: {0}
 SKR_ERR_ALIVE = Bu komutu ölü iken kullanamazsınız.^n
 SKR_ERR_ALHIDER = Zaten gizlenensiniz.^n
@@ -22,4 +26,6 @@ SKR_ERR_SKR = Diğer ouyncu, "{0}", zaten ebe
 SKR_SEEKER = Artık ebesiniz.
 SKR_WHO_FIND = Mevcut ebe "{0}".^n
 SKR_WHO_NOTEXISTS = Şuan ebe yok. Ebe olmak için ''.seeker'' yazın^n
-SKR_CAUGHT = Gizlenen "{0}", ebe tarafından yakalandı "{1}".^n
+SKR_CAUGHT = Gizlenen "{0}", ebe "{1}" tarafından yakalandı .^n
+SKR_ERR_SEEKER = Bu komutu kullanazsınız, ebe rasgele seçilecek.
+SKR_RANDOM_SEEKER = {0} ebe olarak seçildi.

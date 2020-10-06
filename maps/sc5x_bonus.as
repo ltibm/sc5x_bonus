@@ -1,5 +1,9 @@
 //Original By Adambean, Multilanguage Support By Lt.
+CCVar@ cvar_SeekerType;
+CCVar@ cvar_RandomSelectionTime;
+float randomSelectionTime;
 #include "../xp_phrase"
+
 CBasePlayer@ FindSeeker()
 {
     CBaseEntity@ pSeekerEntity = g_EntityFuncs.FindEntityByTargetname(null, "seeker");
@@ -108,6 +112,35 @@ void MapLoop()
         sSeekerStatusMsgParams.effect   = 0;
  
     }
+	int leftTime = 0;
+	bool IsSekerSelectedByRandom = cvar_SeekerType.GetInt() == 1;
+	if(IsSekerSelectedByRandom)
+	{
+		if(randomSelectionTime == -1)
+		{				
+			if(cvar_RandomSelectionTime.GetFloat() < 1.0)
+			{
+				randomSelectionTime = g_Engine.time - 0.1;
+			}
+			else
+			{
+				randomSelectionTime = g_Engine.time + cvar_RandomSelectionTime.GetFloat();
+			}
+		}
+		leftTime = int(randomSelectionTime - g_Engine.time);
+		
+		if(leftTime <= 0)
+		{
+			CBasePlayer@ cRandom = GetRandomPlayer();
+			if(cRandom !is null)
+			{
+				SetSeeker(@cRandom);
+				ClientPrintAllML("SKR_RANDOM_SEEKER", {cRandom.pev.netname});
+			}
+		}
+	}
+	
+	
 	//for ML Support
 	for (int i = 1; i <= g_Engine.maxClients; i++) {
 		@pPlayer = g_PlayerFuncs.FindPlayerByIndex(i);
@@ -118,13 +151,37 @@ void MapLoop()
 		}
 		else
 		{
-			szSeekerStatusMsg = MLText(pPlayer, "SKR_STATUS");
+			if(IsSekerSelectedByRandom)
+			{
+				szSeekerStatusMsg = MLText(pPlayer, "SKR_STATUS_TIMER", {leftTime});
+			}
+			else
+			{
+				szSeekerStatusMsg = MLText(pPlayer, "SKR_STATUS");
+			}
+
 		}
 		g_PlayerFuncs.HudMessage(pPlayer, sSeekerStatusMsgParams, szSeekerStatusMsg);
 		
 	}
     //g_PlayerFuncs.HudMessageAll(sSeekerStatusMsgParams, szSeekerStatusMsg);
 }
+CBasePlayer@ GetRandomPlayer()
+{
+	array<CBasePlayer@> players;
+	uint totalplayer = 0;
+    for (int i = 1; i <= g_Engine.maxClients; i++) {
+        CBasePlayer@ pPlayer = g_PlayerFuncs.FindPlayerByIndex(i);
+        if (pPlayer is null || !pPlayer.IsPlayer() or !pPlayer.IsConnected() || pPlayer.pev.targetname == "seeker") {
+            continue;
+        }
+		players.insertLast(pPlayer);
+		totalplayer++;
+    }
+	if(totalplayer == 0) return null;
+	return @players[Math.RandomLong(0, totalplayer -1)];
+}
+
 
 void MapInit()
 {
@@ -134,6 +191,9 @@ void MapInit()
 
     g_Scheduler.SetInterval("MapLoop", 1, -1);
 	RegisterMLDirect("scripts/maps/sc5x_bonus.txt");
+	@cvar_SeekerType = @CCVar("seeker_type", 0, "0: Manuel, 1: Random", ConCommandFlag::AdminOnly);
+	@cvar_RandomSelectionTime = @CCVar("seeker_randomtime", 10, "Random seeker selecting cooldown", ConCommandFlag::AdminOnly);
+	randomSelectionTime = -1;
 }
 
 HookReturnCode ClientSay(SayParameters@ pParams)
@@ -175,6 +235,11 @@ HookReturnCode ClientSay(SayParameters@ pParams)
 
     // Become the seeker
     if (args[0] == ".seeker") {
+		if(cvar_SeekerType.GetInt() == 1)
+		{
+			ClientPrintAllML("SKR_ERR_SEEKER");
+			return HOOK_HANDLED;
+		}
         if (pPlayer.pev.targetname == "seeker") {
             g_PlayerFuncs.SayText(pPlayer, MLText(pPlayer, "SKR_ERR_ALSEEKER"));
 
@@ -188,11 +253,7 @@ HookReturnCode ClientSay(SayParameters@ pParams)
 
             return HOOK_HANDLED;
         }
-
-        pPlayer.pev.targetname = "seeker";
-        g_EntityFuncs.FireTargets("respawn_one", pPlayer, pPlayer, USE_TOGGLE, 0);
-        g_PlayerFuncs.SayText(pPlayer, MLText(pPlayer, "SKR_SEEKER"));
-
+		SetSeeker(@pPlayer);
         return HOOK_HANDLED;
     }
 
@@ -212,6 +273,12 @@ HookReturnCode ClientSay(SayParameters@ pParams)
     }
 
     return HOOK_CONTINUE;
+}
+void SetSeeker(CBasePlayer@ pPlayer)
+{
+    pPlayer.pev.targetname = "seeker";
+    g_EntityFuncs.FireTargets("respawn_one", pPlayer, pPlayer, USE_TOGGLE, 0);
+	g_PlayerFuncs.SayText(pPlayer, MLText(pPlayer, "SKR_SEEKER"));
 }
 void ClientPrintAllML(string mlName, array<string> params = {})
 {
