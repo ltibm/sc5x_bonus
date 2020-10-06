@@ -114,7 +114,7 @@ void MapLoop()
     }
 	int leftTime = 0;
 	bool IsSekerSelectedByRandom = cvar_SeekerType.GetInt() == 1;
-	if(IsSekerSelectedByRandom)
+	if(IsSekerSelectedByRandom && pSeeker is null)
 	{
 		if(randomSelectionTime == -1)
 		{				
