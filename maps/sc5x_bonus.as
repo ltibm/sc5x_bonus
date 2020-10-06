@@ -137,7 +137,12 @@ void MapLoop()
 				SetSeeker(@cRandom);
 				ClientPrintAllML("SKR_RANDOM_SEEKER", {cRandom.pev.netname});
 			}
+			randomSelectionTime == -1;
 		}
+	}
+	else
+	{
+		if(randomSelectionTime != -1) randomSelectionTime = -1;
 	}
 	
 	
